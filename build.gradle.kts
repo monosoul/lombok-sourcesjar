@@ -43,7 +43,7 @@ tasks {
                         "classpath" to sourceSets.main.get().compileClasspath.asPath)
                 "mkdir"("dir" to target)
                 "delombok"(
-                        "verbose" to true,
+                        "verbose" to false,
                         "encoding" to "UTF-8",
                         "to" to target,
                         "from" to sourceSets.main.get().java.srcDirs.first().absolutePath
