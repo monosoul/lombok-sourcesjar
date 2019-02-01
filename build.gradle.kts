@@ -30,26 +30,23 @@ tasks {
         }
     }
 
-    register<Jar>("sourcesJar") {
-        from(sourceSets.main.get().allJava)
-        archiveClassifier.set("sources")
-    }
-
     register("delombok") {
         group = "delombok"
 
         doLast({
             ant.withGroovyBuilder {
+                val target = File(buildDir, "delomboked")
+
                 "taskdef"(
                         "name" to "delombok",
                         "classname" to "lombok.delombok.ant.Tasks\$Delombok",
-                        "classpath" to project.configurations.compileOnly.asPath)
-                "mkdir"("dir" to "build/src-delomboked")
+                        "classpath" to sourceSets.main.get().compileClasspath.asPath)
+                "mkdir"("dir" to target)
                 "delombok"(
-                        "verbose" to "true",
+                        "verbose" to true,
                         "encoding" to "UTF-8",
-                        "to" to "build/src-delomboked",
-                        "from" to "src/main/java"
+                        "to" to target,
+                        "from" to sourceSets.main.get().java.srcDirs.first().absolutePath
                 ) {
                     "format"("value" to "generateDelombokComment:skip")
                     "format"("value" to "generated:generate")
@@ -57,5 +54,10 @@ tasks {
                 }
             }
         })
+    }
+
+    register<Jar>("sourcesJar") {
+        from(sourceSets.main.get().allJava)
+        archiveClassifier.set("sources")
     }
 }
