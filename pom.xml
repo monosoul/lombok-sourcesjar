@@ -7,7 +7,7 @@
 	<artifactId>lombok-sourcesjar</artifactId>
 	<groupId>com.github.monosoul</groupId>
 	<version>1.0.0</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
