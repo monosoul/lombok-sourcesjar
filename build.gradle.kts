@@ -31,7 +31,7 @@ tasks {
     }
 
     val delombok by creating {
-        group = "delombok"
+        group = "lombok"
 
         val delombokTarget by extra { File(buildDir, "delomboked") }
         
