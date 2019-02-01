@@ -30,22 +30,22 @@ tasks {
         }
     }
 
-    register("delombok") {
+    val delombok by creating {
         group = "delombok"
 
+        val delombokTarget by extra { File(buildDir, "delomboked") }
+        
         doLast({
             ant.withGroovyBuilder {
-                val target = File(buildDir, "delomboked")
-
                 "taskdef"(
                         "name" to "delombok",
                         "classname" to "lombok.delombok.ant.Tasks\$Delombok",
                         "classpath" to sourceSets.main.get().compileClasspath.asPath)
-                "mkdir"("dir" to target)
+                "mkdir"("dir" to delombokTarget)
                 "delombok"(
                         "verbose" to false,
                         "encoding" to "UTF-8",
-                        "to" to target,
+                        "to" to delombokTarget,
                         "from" to sourceSets.main.get().java.srcDirs.first().absolutePath
                 ) {
                     "format"("value" to "generateDelombokComment:skip")
@@ -57,7 +57,10 @@ tasks {
     }
 
     register<Jar>("sourcesJar") {
-        from(sourceSets.main.get().allJava)
+        dependsOn(delombok)
+
+        val delombokTarget: File by delombok.extra
+        from(delombokTarget)
         archiveClassifier.set("sources")
     }
 }
