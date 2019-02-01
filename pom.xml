@@ -58,6 +58,10 @@
 					<outputDirectory>${project.build.directory}/delombok</outputDirectory>
 					<addOutputDirectory>false</addOutputDirectory>
 					<encoding>UTF-8</encoding>
+					<formatPreferences>
+						<!-- https://github.com/rzwitserloot/lombok/blob/master/src/delombok/lombok/delombok/FormatPreferences.java#L42 -->
+						<generateDelombokComment>skip</generateDelombokComment>
+					</formatPreferences>
 				</configuration>
 			</plugin>
 			<plugin>
