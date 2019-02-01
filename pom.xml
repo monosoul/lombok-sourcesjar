@@ -12,19 +12,58 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<lombok.version>1.18.4</lombok.version>
+
+		<origSourceDir>${project.basedir}/src/main/java</origSourceDir>
+		<sourceDir>${origSourceDir}</sourceDir>
+		<delombokedSourceDir>${project.build.directory}/delombok</delombokedSourceDir>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.4</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>build</id>
+			<properties>
+				<sourceDir>${delombokedSourceDir}</sourceDir>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
+		<sourceDirectory>${sourceDir}</sourceDirectory>
 		<plugins>
+			<plugin>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok-maven-plugin</artifactId>
+				<version>${lombok.version}.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>delombok</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${origSourceDir}</sourceDirectory>
+					<outputDirectory>${delombokedSourceDir}</outputDirectory>
+					<addOutputDirectory>false</addOutputDirectory>
+					<encoding>UTF-8</encoding>
+					<formatPreferences>
+						<generateDelombokComment>skip</generateDelombokComment>
+						<javaLangAsFQN>skip</javaLangAsFQN>
+					</formatPreferences>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
