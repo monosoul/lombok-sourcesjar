@@ -63,4 +63,11 @@ tasks {
         from(delombokTarget)
         archiveClassifier.set("sources")
     }
+
+    withType(JavaCompile::class) {
+        dependsOn(delombok)
+
+        val delombokTarget: File by delombok.extra
+        source = fileTree(delombokTarget)
+    }
 }
